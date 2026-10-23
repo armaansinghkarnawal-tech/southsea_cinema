@@ -15,7 +15,14 @@ class MovieListing extends StatelessWidget {
         elevation: 0,
       ),
       drawer: const NavDrawer(),
-      body: const SizedBox.shrink(),
+      body: Container(
+          color: cinemaFontMuted,
+          child: Column(
+            children: [
+              Text('harry poter'),
+              Text("southsea cinema in portsmouth")
+            ],
+          )),
     );
   }
 }
