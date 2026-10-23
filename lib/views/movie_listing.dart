@@ -20,7 +20,12 @@ class MovieListing extends StatelessWidget {
           child: Column(
             children: [
               Text('harry poter'),
-              Text("southsea cinema in portsmouth")
+              Text("southsea cinema in portsmouth"),
+              ElevatedButton(
+                  onPressed: () {
+                    print('add button pressed');
+                  },
+                  child: const Text('add'))
             ],
           )),
     );
