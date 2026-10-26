@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:southsea_cinema/constants.dart';
+import 'package:southsea_cinema/models/movie.dart';
 import 'package:southsea_cinema/widgets/nav_drawer.dart';
 
 class MovieListing extends StatefulWidget {
-  const MovieListing({super.key});
+  final Movie movie;
+
+  const MovieListing({super.key, required this.movie});
 
   @override
   State<MovieListing> createState() => _MovieListingState();
@@ -15,6 +18,9 @@ class _MovieListingState extends State<MovieListing> {
 
   @override
   Widget build(BuildContext context) {
+    final movie = widget.movie;
+    final total = movie.ticketPrice * _ticketQuantity;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: cinemaHeaderStyle),
@@ -31,20 +37,29 @@ class _MovieListingState extends State<MovieListing> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Harry Potter and the Philosopher's Stone",
-                style: cinemaHeaderStyle,
-              ),
-              const SizedBox(height: 12),
-              const Text(
-                'Runtime: 152 minutes | Age rating: PG',
-                style: TextStyle(color: cinemaFontMuted),
+              Image.asset(
+                movie.posterImagePath,
+                height: 280,
+                width: double.infinity,
+                fit: BoxFit.contain,
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Harry discovers he is a wizard and joins Hogwarts, '
-                'where he makes new friends and uncovers a mystery.',
-                style: TextStyle(color: cinemaFontWhite),
+              Text(movie.title, style: cinemaHeaderStyle),
+              const SizedBox(height: 12),
+              Text(
+                'Age rating: ${movie.ageRating} | '
+                'Screening: ${movie.screeningTime}',
+                style: const TextStyle(color: cinemaFontMuted),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                movie.synopsis,
+                style: const TextStyle(color: cinemaFontWhite),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Ticket price: £${movie.ticketPrice.toStringAsFixed(2)}',
+                style: const TextStyle(color: cinemaFontWhite),
               ),
               const SizedBox(height: 24),
               DropdownMenu<int>(
@@ -55,6 +70,7 @@ class _MovieListingState extends State<MovieListing> {
                   if (value != null) {
                     setState(() {
                       _ticketQuantity = value;
+                      _bookingMessage = '';
                     });
                   }
                 },
@@ -71,6 +87,11 @@ class _MovieListingState extends State<MovieListing> {
                 'Tickets selected: $_ticketQuantity',
                 style: const TextStyle(color: cinemaFontWhite),
               ),
+              const SizedBox(height: 8),
+              Text(
+                'Total: £${total.toStringAsFixed(2)}',
+                style: const TextStyle(color: cinemaFontWhite),
+              ),
               const SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -83,7 +104,8 @@ class _MovieListingState extends State<MovieListing> {
                 onPressed: () {
                   setState(() {
                     _bookingMessage =
-                        'Added $_ticketQuantity tickets to the order';
+                        'Added $_ticketQuantity tickets for ${movie.title} '
+                        'to the order';
                   });
                 },
                 child: const Text('Add to order'),
