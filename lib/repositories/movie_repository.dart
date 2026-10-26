@@ -25,4 +25,13 @@ class MovieRepository {
       ),
     ];
   }
+
+  Movie? getMovieById(String id) {
+    for (final movie in getMovies()) {
+      if (movie.id == id) {
+        return movie;
+      }
+    }
+    return null;
+  }
 }
